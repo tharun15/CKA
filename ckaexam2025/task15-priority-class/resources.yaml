@@ -5,27 +5,23 @@ metadata:
   name: priority
 
 ---
-# Existing high priority class
-apiVersion: scheduling.k8s.io/v1
-kind: PriorityClass
-metadata:
-  name: system-priority
-spec:
-  value: 1000000
-  globalDefault: false
-  description: "This priority class is for system-level pods"
-
----
 # Lower priority class that will be used by the low-priority deployment
 apiVersion: scheduling.k8s.io/v1
 kind: PriorityClass
 metadata:
   name: low-priority
-spec:
-  value: 1000
-  globalDefault: false
-  description: "This priority class is for low-priority workloads"
-
+value: 1000
+globalDefault: false
+description: "This priority class is for low-priority workloads"
+---
+# Higher priority class that will be used by the high-priority deployment
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: high-priority
+value: 1001
+globalDefault: false
+description: "This priority class is for high-priority workloads"
 ---
 # The main busybox-logger deployment that will need to be patched
 apiVersion: apps/v1
@@ -78,7 +74,7 @@ spec:
       labels:
         app: resource-consumer
     spec:
-      priorityClassName: low-priority
+      priorityClassName: high-priority
       containers:
       - name: consumer
         image: busybox:latest
@@ -96,16 +92,3 @@ spec:
           limits:
             cpu: 300m
             memory: 200Mi
-
----
-# Resource limits for the namespace to force eviction scenarios
-apiVersion: v1
-kind: ResourceQuota
-metadata:
-  name: priority-quota
-  namespace: priority
-spec:
-  hard:
-    # Setting tight limits to ensure resource competition
-    cpu: 900m
-    memory: 500Mi
