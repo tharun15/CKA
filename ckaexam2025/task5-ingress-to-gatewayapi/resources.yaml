@@ -1,0 +1,81 @@
+# TLS Secret from task1 with CN=example.com
+apiVersion: v1
+kind: Secret
+metadata:
+  name: nginx-tls-secret
+type: kubernetes.io/tls
+data:
+  tls.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUREVENDQWZXZ0F3SUJBZ0lVVVRodHE4a3B4bWJ4MDRWdUZDRGFDenA5NTVNd0RRWUpLb1pJaHZjTkFRRUwKQlFBd0ZqRVVNQklHQTFVRUF3d0xaWGhoYlhCc1pTNWpiMjB3SGhjTk1qVXdPREEyTVRneU1ERTRXaGNOTWpZdwpPREEyTVRneU1ERTRXakFXTVJRd0VnWURWUVFEREF0bGVHRnRjR3hsTG1OdmJUQ0NBU0l3RFFZSktvWklodmNOCkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFNcFdlbm5QZXJDOWxxVE5YRDlhSlUrZUJXQ1NHQjNRcmtFOEdrS08KOUkxNHNBRlFIQXJtMk1VRjBsZlFpa3piakx0TEtsRFo1NjdSWFU2aHhPN0JZbGNqSGFHOVd1bUJxd1RwQmNzNgpnTlV6dzFXSmcxM1EwdGtHZjJHcVgzTWNNOVhlU2w1QlZvNUNzWUxSamN0dFozQ1hzbk1YaGhpS0VFbkRFMHhrCnNReDdoOXZPdzVTaUhkQU9YTGRBbDh3VThKU05lM1BvT2ZBeFdyMGpKajlBM0grNll3SzdkYm9BcTF6U2U4WWUKdmpwQlZ2VFI5QzN3cmNBUXpFQkpiNFNOaU9Pb3pxSVAzYmwybkNFa3dxLzY0bWQzbnBoYnVxbU1NUzZLMGNySApGa1V0ZWtuQ0pvMkJoVGxleHM4VXAyRmhNdjlUbHNucS9pR2ZubUVibGRFQkxSRUNBd0VBQWFOVE1GRXdIUVlEClZSME9CQllFRkE4SnRVUCtPZDhsMzZ5WWdCczFiemhIazZma01COEdBMVVkSXdRWU1CYUFGQThKdFVQK09kOGwKMzZ5WWdCczFiemhIazZma01BOEdBMVVkRXdFQi93UUZNQU1CQWY4d0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dFQgpBREtPKzBnUGhLLzFLNlhGSFp4aERnemk2K2hYZDFvLzVrT0o3bldwT0c0bnlGSW84S2p1di9mNEdHQ2NpdjdPClJrRVNuN3ZBQVdaRS93UWJTMzdtOW9tQ3Q1THNRWjQyeWJMTkMvdGU4cld3Q2Evc1hMcy9TQXUrMVAxT0Y2VkMKQldjUEUvZFd1b0I2eGY5Njg2TnlYTkhDOWNvOFpYZGwyNmZaUkx6Zm5kUVFWd2NOMmkvSzZJTTc3d3pib24zYQpRTXFjMUxyVTAwTFUyZVo3MTNDTEZzRmE5Nkd4ZnJEZTZkR2J4K000Wkh2dnJpY0VyNXBHMEZKWENjR04vUVRvCjFuVWllSFRQUnJzdW9zVVNkMW1jeVlrSklUVWZZVEhuSDM1VlVRUnE4Y2g5Q0VyVFhLNWZsV09ickFUT3FobmEKZE1XSFdDN29rWFRpUXdxeURKcUQ0T3c9Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+  tls.key: LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV2QUlCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktZd2dnU2lBZ0VBQW9JQkFRREtWbnA1ejNxd3ZaYWsKelZ3L1dpVlBuZ1Zna2hnZDBLNUJQQnBDanZTTmVMQUJVQndLNXRqRkJkSlgwSXBNMjR5N1N5cFEyZWV1MFYxTwpvY1R1d1dKWEl4Mmh2VnJwZ2FzRTZRWExPb0RWTThOVmlZTmQwTkxaQm45aHFsOXpIRFBWM2twZVFWYU9RckdDCjBZM0xiV2R3bDdKekY0WVlpaEJKd3hOTVpMRU1lNGZienNPVW9oM1FEbHkzUUpmTUZQQ1VqWHR6NkRud01WcTkKSXlZL1FOeC91bU1DdTNXNkFLdGMwbnZHSHI0NlFWYjAwZlF0OEszQUVNeEFTVytFallqanFNNmlEOTI1ZHB3aApKTUt2K3VKbmQ1NllXN3FwakRFdWl0SEt4eFpGTFhwSndpYU5nWVU1WHNiUEZLZGhZVEwvVTViSjZ2NGhuNTVoCkc1WFJBUzBSQWdNQkFBRUNnZ0VBQXBlMmxJcDl6RGQxcjNGcE1lK2VCRVhtVkQweS9XalAzc3FlSElXMzZQc24KcURDbVYxWnJaeVRpczlqYWVNOGtYNzhBRVE2bHV4WDRMOXAvU3o3am0zRzUvcmxPS2FsTmIyL3I4TlYwVXFjSgo1UFh3M3JvZkJZUmhpL2NTcDRjd085aVFFK0thOFJJMk01S3JValM1NjFXcVJmTENkMXlIaG1adlFCNlhMUzEvCkt1U2x4ckk3TGV2c3l4QktyNHBrcnN0akJLdDhZVzd5UDVEUnc1bVNkRXNQaTRZRDNEZTdqUW4xMzFyeHVsT1EKRmdkWDBDSnU0RGlnMmNSeXFCdkhCM1U1ZmZ6YzlDaG1pRzg4Uk5mUnV1RjA5aitiL0pTeEx1b054MmdJQy9xSQprcS96T09RQmQxRUlUb2pKTkRpckdMTG1CMjlJUWNUd3dvRzY3dDdNaFFLQmdRRCtrdk1WWmwwTFU5aHltNTBoCnpwL0p3dEh2d1dGQzA2ZWF4d25MRks4dHdJcE53RVRla2lKRU9aRHg2Skh1N0N4WGwzSjVvbW4wQTBwYzR4U2kKRVBXNlNtdzhSd3NvVEtFbnBTSURoYkNMRE4ybG9FUUdKc255K0FkYldEZ0pac0xsSVNHOHZlOC9aTkovMmlqOApXL2pTaytxTkR5L0t5NC85WjRYTWNoNEN0UUtCZ1FETGVKKzVxUXdHeHl3cmdKaFZmNGVHOFdxREVXbE5qOU05CmV4SUQ3VVIyVUY2TDBsWGFyNU42eTAxMGJmUWhKdEhoWXBPN28wNVRHNEcrdTlra0tqaEZIVkFZOVo5d2NpTU8KM2NsZlYyRzNaZEx6cGRZK0dBRis0cTdZWkw3dEtUdXlJT3dMV3VWUUJWTW42dWlNQUFrVzZoUDlxWkNKK1kzbgp0NExuY2JldWJRS0JnQlJIMXErOHdPclhHaVkvT1d4cERwZS9Pb1JVTHBCcFZpL2hiV2xOVTR0Y2pHZ1hTaVZGCkZRL0VXa1M3VjJ6bVNiNE1wYVVGQ0ZYVk1VWm5ITXl3ZHpNSkhNaE1qSm9BU05Ka3VHbjVhNUFZVFV3VmtYVy8KLzFTbzU4VWlLUXl1c0JZYTVwb25zM2lrYXBTZTU2YjdHTDZGNUNpcXJnOEUyb3JBaFlzOUNDRUZBb0dBUTBzNgpzR0hMZTNabUVtRXVnS0IwQjFwUzJ0Um9XbUdtQUtCeWZkLzhFNUZUSTdWRjlkUzUxeFBrSXd5MmdEeGhqOFJWCmplcGQzamlydVpSUkpaZmRFbWEyZGZyT1o1Y29KeU9ORlQ1R01DeTZEeUVhOFdCcEpqajhrTThKSWxEUDBJTDQKN214NmlQT3A0L3JhUEd0S2xreUduZzkxb1Z4cTVXY1pJVWpIOGlVQ2dZQUdORWFkSEFXNTV3MDVaZEIyQlJ3egovREo1azRqQ2ZNTGs0VUxPcFJrTEprQ3o0NGFWaStDWUtzZm5qcWZONkNpTkJtdkJRZmdaK0hLS2FGcnBSd3dxCmZzaVg4UktZRkFaYnJKU08xSi95aEhPcEk4Y3RFdVhYYzZRaHQ4ZG44NkwwVWdrWloxTnY1QXcyMmlyZS9heEsKT1c4U3oxdzJlc0ZpNmtQRlMrajlhdz09Ci0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0K
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+  labels:
+    app: web-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-app
+  template:
+    metadata:
+      labels:
+        app: web-app
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: html-content
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: html-content
+        configMap:
+          name: web-content
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-content
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Welcome to Nginx</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          margin: 40px;
+          text-align: center;
+        }
+        h1 {
+          color: #333;
+        }
+      </style>
+    </head>
+    <body>
+      <h1>Welcome to the Web App</h1>
+      <p>This page is being served by Nginx and is accessible via Gateway API.</p>
+    </body>
+    </html>
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-service
+  labels:
+    app: web-app
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+  selector:
+    app: web-app

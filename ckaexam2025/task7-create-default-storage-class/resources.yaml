@@ -1,0 +1,29 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: low-latency
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "false"
+provisioner: csi-driver.example-vendor.example
+reclaimPolicy: Retain # default value is Delete
+allowVolumeExpansion: true
+mountOptions:
+  - discard # this might enable UNMAP / TRIM at the block storage layer
+volumeBindingMode: WaitForFirstConsumer
+parameters:
+  guaranteedReadWriteLatency: "true" # provider-specific
+
+# The following is an example PVC that could use this StorageClass
+# Commented out as part of the task - for reference only
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: example-pvc
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   storageClassName: low-latency
+#   resources:
+#     requests:
+#       storage: 1Gi

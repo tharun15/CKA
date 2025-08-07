@@ -1,0 +1,90 @@
+# Namespace for the task
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: task14
+
+---
+# Persistent Volume that survived the deletion of the MariaDB deployment
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mariadb-pv
+  labels:
+    type: local
+    app: mariadb
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 250Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/mariadb-data"
+  persistentVolumeReclaimPolicy: Retain
+  # The PV contains some data we want to preserve
+  claimRef:
+    namespace: task14
+    name: mariadb
+    # This PV is now released but still has the claimRef pointing to the
+    # previous PVC, simulating a deleted deployment scenario
+
+---
+# This represents the "deleted" MariaDB deployment that we'll need to recreate
+# The commented section is here for reference, you'll need to create a similar deployment
+# as part of the task
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: mariadb
+#   namespace: task14
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: mariadb
+#   template:
+#     metadata:
+#       labels:
+#         app: mariadb
+#     spec:
+#       containers:
+#       - name: mariadb
+#         image: mariadb:10.5
+#         env:
+#         - name: MYSQL_ROOT_PASSWORD
+#           value: "rootpassword"
+#         - name: MYSQL_DATABASE
+#           value: "mydatabase"
+#         - name: MYSQL_USER
+#           value: "myuser"
+#         - name: MYSQL_PASSWORD
+#           value: "mypassword"
+#         ports:
+#         - containerPort: 3306
+#           name: mariadb
+#         volumeMounts:
+#         - name: mariadb-data
+#           mountPath: /var/lib/mysql
+#       volumes:
+#       - name: mariadb-data
+#         persistentVolumeClaim:
+#           claimName: mariadb
+#           # This PVC should be created to reuse the existing PV
+
+# The PersistentVolumeClaim that needs to be created is not included here
+# You will need to create it as part of the task
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: mariadb
+#   namespace: task14
+# spec:
+#   storageClassName: manual
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 250Mi

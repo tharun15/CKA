@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: main-app
+  labels:
+    app: main-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: main-app
+  template:
+    metadata:
+      labels:
+        app: main-app
+    spec:
+      containers:
+      - name: main-container
+        image: busybox:latest
+        command: ["sh", "-c", "while true; do echo \"Application running at $(date)\" >> /var/log/app/app.log; sleep 10; done"]
+        env:
+        - name: APP_ENV
+          value: "production"
+        - name: LOG_LEVEL
+          value: "info"
+        volumeMounts:
+        - name: log-volume
+          mountPath: /var/log/app
+      # The sidecar container is commented out as part of the task
+      # Users will need to add this themselves
+      # - name: log-sidecar
+      #   image: busybox:latest
+      #   command: ["sh", "-c", "tail -F /var/log/app/app.log | while read line; do echo \"[Sidecar] $line\" >> /var/log/app/processed.log; done"]
+      #   volumeMounts:
+      #   - name: log-volume
+      #     mountPath: /var/log/app
+      volumes:
+      - name: log-volume
+        emptyDir: {}

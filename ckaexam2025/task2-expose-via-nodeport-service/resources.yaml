@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-web
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+
+# The Service is commented out as part of the task.
+# Users will need to create this themselves
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: nginx-service
+#   labels:
+#     app: nginx
+# spec:
+#   type: NodePort
+#   ports:
+#   - port: 80
+#     targetPort: 80
+#     protocol: TCP
+#     # nodePort: 30080  # Optionally specify a specific NodePort
+#   selector:
+#     app: nginx

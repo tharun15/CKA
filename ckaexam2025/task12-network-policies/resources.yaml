@@ -1,0 +1,170 @@
+# Namespaces for frontend and backend deployments
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: frontend
+  labels:
+    role: frontend
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: backend
+  labels:
+    role: backend
+
+---
+# Frontend deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: frontend
+  labels:
+    app: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+          name: http
+        # Add a curl utility to test connectivity
+        command: ["/bin/sh", "-c"]
+        args:
+          - echo "Frontend application is running" > /usr/share/nginx/html/index.html;
+            nginx -g "daemon off;" & 
+            sleep 10;
+            while true; do
+              echo "Heartbeat from frontend $(date)";
+              sleep 30;
+            done
+
+---
+# Backend deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: backend
+  labels:
+    app: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend-api
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+          name: http
+        # Add a curl utility to test connectivity
+        command: ["/bin/sh", "-c"]
+        args:
+          - echo "Backend API is running" > /usr/share/nginx/html/index.html;
+            nginx -g "daemon off;" & 
+            sleep 10;
+            while true; do
+              echo "Heartbeat from backend $(date)";
+              sleep 30;
+            done
+
+---
+# Services to expose the deployments
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-svc
+  namespace: frontend
+spec:
+  selector:
+    app: frontend
+  ports:
+  - port: 80
+    targetPort: 80
+    name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-svc
+  namespace: backend
+spec:
+  selector:
+    app: backend
+  ports:
+  - port: 80
+    targetPort: 80
+    name: http
+
+---
+# Network Policy 1: deny-all (already applied, mentioned in task to not delete)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all
+  namespace: backend
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+
+---
+# Network Policy 2: allow-frontend-to-backend (the correct policy for the task)
+# This is the policy the user should apply
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-frontend-to-backend
+  namespace: backend
+spec:
+  podSelector:
+    matchLabels:
+      app: backend
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          role: frontend
+      podSelector:
+        matchLabels:
+          app: frontend
+    ports:
+    - protocol: TCP
+      port: 80
+
+---
+# Network Policy 3: allow-all-in-namespace (too permissive)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-all-in-namespace
+  namespace: backend
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector: {}
+    ports:
+    - protocol: TCP

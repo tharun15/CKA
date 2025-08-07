@@ -1,0 +1,111 @@
+# Namespace for the priority class demonstration
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: priority
+
+---
+# Existing high priority class
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: system-priority
+spec:
+  value: 1000000
+  globalDefault: false
+  description: "This priority class is for system-level pods"
+
+---
+# Lower priority class that will be used by the low-priority deployment
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: low-priority
+spec:
+  value: 1000
+  globalDefault: false
+  description: "This priority class is for low-priority workloads"
+
+---
+# The main busybox-logger deployment that will need to be patched
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: busybox-logger
+  namespace: priority
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: busybox-logger
+  template:
+    metadata:
+      labels:
+        app: busybox-logger
+    spec:
+      # This deployment initially doesn't have a priority class set
+      containers:
+      - name: logger
+        image: busybox:latest
+        command: ["/bin/sh", "-c"]
+        args:
+          - while true; do
+              echo "Logging from busybox-logger at $(date)";
+              sleep 10;
+            done
+        resources:
+          requests:
+            cpu: 100m
+            memory: 50Mi
+          limits:
+            cpu: 200m
+            memory: 100Mi
+
+---
+# Resource-intensive deployment that will be evicted when the high-priority deployment is patched
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: resource-consumer
+  namespace: priority
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: resource-consumer
+  template:
+    metadata:
+      labels:
+        app: resource-consumer
+    spec:
+      priorityClassName: low-priority
+      containers:
+      - name: consumer
+        image: busybox:latest
+        command: ["/bin/sh", "-c"]
+        args:
+          - while true; do
+              echo "Consuming resources at $(date)";
+              sleep 5;
+            done
+        resources:
+          # This deployment requests a significant amount of resources
+          requests:
+            cpu: 200m
+            memory: 100Mi
+          limits:
+            cpu: 300m
+            memory: 200Mi
+
+---
+# Resource limits for the namespace to force eviction scenarios
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: priority-quota
+  namespace: priority
+spec:
+  hard:
+    # Setting tight limits to ensure resource competition
+    cpu: 900m
+    memory: 500Mi

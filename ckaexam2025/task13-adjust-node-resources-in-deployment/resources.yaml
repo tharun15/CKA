@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      initContainers:
+      - name: init-nginx
+        image: busybox:latest
+        command: ['sh', '-c', 'echo "Init container preparing environment..." && sleep 5']
+        resources:
+          requests:
+            cpu: "0.9"
+            memory: "277Mi"
+          limits:
+            cpu: "1.8"
+            memory: "555Mi"
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "0.9"
+            memory: "277Mi"
+          limits:
+            cpu: "1.8"
+            memory: "555Mi"

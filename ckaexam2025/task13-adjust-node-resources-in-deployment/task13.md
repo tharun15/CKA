@@ -1,0 +1,24 @@
+Task: Adjust Pod Resource Requests in a Kubernetes Deployment
+
+Background:
+Kubernetes uses resource requests and limits to manage CPU and memory allocation for containers. Resource requests specify the minimum amount of resources needed for a container to run, while limits specify the maximum amount of resources that can be consumed. When a node does not have enough resources to accommodate all pods with their requested resources, some pods will remain in a Pending state until resources become available.
+
+Objective:
+Adjust resource requests and limits in a Kubernetes deployment to ensure all 3 pods can run successfully on a node with limited resources. The current configuration only allows 2 out of 3 pods to run because of the resource settings.
+
+Tasks:
+1. Analyze the current deployment resource settings
+   - Examine the resource requests and limits for both the main container and init container
+   - Verify that only 2 out of 3 pods are running due to resource constraints
+
+2. Check the node's allocatable resources
+   - Determine the available CPU and memory on the node
+   - Calculate the fair share of resources for each pod
+
+3. Adjust the resource settings to fit all 3 pods
+   - Modify the resource requests and limits for both containers
+   - Ensure that the total resources requested by all pods don't exceed the node's capacity
+   - Apply the updated deployment
+
+Resources:
+The execute.sh script creates a namespace called task13 and generates a deployment manifest with resource settings calculated based on the node's allocatable resources. The script sets up the environment so that only 2 out of 3 pods can run due to resource constraints, providing a scenario for you to solve by adjusting the resource settings.
