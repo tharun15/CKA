@@ -3,7 +3,7 @@
 ## Task Overview
 In this task, you will configure a Kubernetes Ingress resource with TLS to securely expose a web application to external traffic, making it accessible from outside the cluster via HTTPS with the example.com hostname.
 
-**Note:** A TLS Secret with a certificate for example.com is already provided in the resources.yaml file (reused from task1).
+**Note:** A TLS Secret with a certificate for example.com is already provided in the resources.yaml file (reused from task1). The deployment has been configured to support both HTTP (port 80) and HTTPS (port 443) with the TLS certificate.
 
 ## Setup Instructions
 
@@ -38,7 +38,7 @@ Your task is to create an Ingress resource that exposes the web application to e
 
 Follow these steps to complete the task:
 
-1. Create an Ingress resource file (e.g., `ingress.yaml`) with TLS configuration:
+1. Create an Ingress resource file (e.g., `ingress.yaml`) with TLS configuration to enable secure access to both HTTP and HTTPS endpoints:
    ```yaml
    apiVersion: networking.k8s.io/v1
    kind: Ingress
@@ -64,6 +64,32 @@ Follow these steps to complete the task:
                name: web-app-service
                port:
                  number: 80
+   ```
+
+   Alternatively, you can also configure the Ingress to use the HTTPS port of the service:
+   ```yaml
+   apiVersion: networking.k8s.io/v1
+   kind: Ingress
+   metadata:
+     name: web-app-ingress-https
+     annotations:
+       # Add any necessary annotations here
+   spec:
+     tls:
+     - hosts:
+       - example.com
+       secretName: nginx-tls-secret
+     rules:
+     - host: example.com
+       http:
+         paths:
+         - path: /
+           pathType: Prefix
+           backend:
+             service:
+               name: web-app-service
+               port:
+                 number: 443
    ```
 
 2. Apply the Ingress resource:
@@ -93,7 +119,7 @@ Follow these steps to complete the task:
 - An Ingress resource named `web-app-ingress` is created and running
 - The Ingress resource correctly routes traffic to the web-app-service
 - TLS is properly configured using the provided `nginx-tls-secret`
-- The web application is accessible via HTTPS using the example.com hostname
+- The web application is accessible via both HTTP and HTTPS using the example.com hostname
 - The custom HTML content is displayed when accessing the application
 
 ## Troubleshooting
