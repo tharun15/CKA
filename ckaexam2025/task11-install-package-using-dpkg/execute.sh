@@ -5,13 +5,16 @@ echo "==================================================="
 echo "  Preparing Linux System for Kubernetes with cri-dockerd"
 echo "==================================================="
 
-# Step 1: Download cri-dockerd v0.3.18
-echo "Downloading cri-dockerd v0.3.18 package..."
-wget -P ~/ https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.18/cri-dockerd_0.3.18-0.ubuntu-jammy_amd64.deb
+# Step 1: Verify the cri-dockerd package is available in the current directory
+echo "Checking for cri-dockerd package..."
+if [ ! -f "cri-dockerd_0.4.0.3-0.debian-bookworm_amd64.deb" ]; then
+    echo "Downloading cri-dockerd v0.4.0 package..."
+    wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.4.0/cri-dockerd_0.4.0.3-0.debian-bookworm_amd64.deb
+fi
 
 # Step 2: Install cri-dockerd package using dpkg
 echo "Installing cri-dockerd package using dpkg..."
-sudo dpkg -i ~/cri-dockerd_0.3.18-0.ubuntu-jammy_amd64.deb
+sudo dpkg -i cri-dockerd_0.4.0.3-0.debian-bookworm_amd64.deb
 sudo apt-get update
 sudo apt-get -f install -y
 
