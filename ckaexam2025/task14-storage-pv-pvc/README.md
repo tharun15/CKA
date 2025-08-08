@@ -1,7 +1,7 @@
 # Recover a Deleted Deployment Using Persistent Storage
 
 ## Task Overview
-In this task, you will recover from a scenario where a MariaDB deployment was accidentally deleted, but its associated PersistentVolume still exists. You will create a new PersistentVolumeClaim to reuse this volume, then recreate the MariaDB deployment to restore service with the preserved data.
+In this task, you will recover from a scenario where a MariaDB deployment was accidentally deleted, but its associated PersistentVolume still exists. You will create a new PersistentVolumeClaim to reuse this volume, then apply the generated MariaDB deployment to restore service with the preserved data.
 
 ## Setup Instructions
 
@@ -13,6 +13,7 @@ In this task, you will recover from a scenario where a MariaDB deployment was ac
    This will:
    - Create a namespace called `task14`
    - Create a PersistentVolume named `mariadb-pv` that is in the Released state
+   - Generate a `mariadb-deployment.yaml` file with the MariaDB deployment uncommented and the PVC part commented out
    - Display the current state of resources in the namespace
 
 2. Verify the current state of the PersistentVolume:
@@ -27,7 +28,7 @@ Your task is to:
 
 1. Create a PersistentVolumeClaim named `mariadb` in the `task14` namespace that will reuse the existing PersistentVolume.
 
-2. Create a MariaDB deployment that uses this PVC to access the preserved data.
+2. Apply the generated MariaDB deployment that uses this PVC to access the preserved data.
 
 3. Verify that the MariaDB deployment is running successfully with the restored data.
 
@@ -67,51 +68,9 @@ kubectl get pv mariadb-pv
 
 The PVC should now be in the "Bound" state, and it should be bound to the `mariadb-pv` PersistentVolume.
 
-### Step 3: Create the MariaDB Deployment
+### Step 3: Apply the MariaDB Deployment
 
-Create a YAML file for the deployment (e.g., `mariadb-deployment.yaml`):
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: mariadb
-  namespace: task14
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: mariadb
-  template:
-    metadata:
-      labels:
-        app: mariadb
-    spec:
-      containers:
-      - name: mariadb
-        image: mariadb:10.5
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: "rootpassword"
-        - name: MYSQL_DATABASE
-          value: "mydatabase"
-        - name: MYSQL_USER
-          value: "myuser"
-        - name: MYSQL_PASSWORD
-          value: "mypassword"
-        ports:
-        - containerPort: 3306
-          name: mariadb
-        volumeMounts:
-        - name: mariadb-data
-          mountPath: /var/lib/mysql
-      volumes:
-      - name: mariadb-data
-        persistentVolumeClaim:
-          claimName: mariadb
-```
-
-Apply the deployment:
+The MariaDB deployment YAML was generated when you ran the setup script and is stored in `mariadb-deployment.yaml`. Apply it:
 
 ```bash
 kubectl apply -f mariadb-deployment.yaml
@@ -136,7 +95,7 @@ If MariaDB started successfully and could access the previous data, you should s
 ## Success Criteria
 - A PersistentVolumeClaim named `mariadb` is created in the `task14` namespace
 - The PVC is bound to the existing `mariadb-pv` PersistentVolume
-- A MariaDB deployment is created that uses this PVC
+- The MariaDB deployment is applied from the generated `mariadb-deployment.yaml` file
 - The MariaDB pod is running successfully
 - The logs indicate that MariaDB started without data integrity issues
 
