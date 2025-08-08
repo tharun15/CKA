@@ -65,9 +65,12 @@ For a node with 4 CPU and 1234556Mi memory:
    - Per pod requests (50% of limits): 0.9 CPU and 277775Mi memory
 
 2. **Adjusted settings (allowing all 3 pods to run)**:
-   - 90% available for pods: 3.6 CPU and 1111100Mi memory
-   - Per pod limits (for 3 pods): 1.2 CPU and 370367Mi memory
-   - Per pod requests (adjusted accordingly): 0.6 CPU and 185183Mi memory
+   - The resources for each pod have been adjusted as follows:
+   - Resource limits: 400m CPU and 600Mi memory
+   - Resource requests: 300m CPU and 500Mi memory
+   
+   With these settings, 3 pods will require 900m CPU (300m × 3) and 1500Mi memory (500Mi × 3) 
+   in total for requests, which fits within the node's capacity.
 
 ## Success Criteria
 - All 3 pods should be in the Running state
