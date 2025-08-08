@@ -16,7 +16,7 @@ This task has been set up to demonstrate the migration from Kubernetes Ingress t
    - Instructions for deleting the Ingress resource once Gateway API is working
 
 3. Updated README.md with comprehensive instructions for:
-   - Setting up the environment with Nginx Ingress Controller and Nginx Gateway Controller
+   - Setting up the environment with Nginx Ingress Controller and Nginx Gateway Fabric
    - Creating GatewayClass, Gateway, and HTTPRoute resources
    - Testing the Gateway API configuration
    - Deleting the Ingress resource to complete the migration
@@ -25,7 +25,7 @@ This task has been set up to demonstrate the migration from Kubernetes Ingress t
 4. Updated execute.sh script to:
    - Install Gateway API CRDs
    - Install Nginx Ingress Controller for the Ingress resource
-   - Install Nginx Gateway Controller for the Gateway API resources
+   - Install Nginx Gateway Fabric for the Gateway API resources
    - Configure both controllers with NodePort service type
 
 ## Key differences between Ingress and Gateway API implementation:
@@ -40,6 +40,6 @@ This task has been set up to demonstrate the migration from Kubernetes Ingress t
 
 3. Implementation:
    - Ingress: Using Nginx Ingress Controller
-   - Gateway API: Using Nginx Gateway Controller
+   - Gateway API: Using Nginx Gateway Fabric
 
 The task demonstrates the evolution of Kubernetes' traffic routing capabilities, highlighting how Gateway API offers improved multi-tenancy, enhanced security, and more expressive routing options compared to the traditional Ingress resources. The complete migration process includes removing the old Ingress resource after confirming that the Gateway API implementation is functioning correctly.
