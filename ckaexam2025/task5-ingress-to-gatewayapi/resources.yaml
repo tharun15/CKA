@@ -79,3 +79,27 @@ spec:
     name: http
   selector:
     app: web-app
+---
+# Ingress Resource using Nginx Ingress Controller
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-app-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  tls:
+  - hosts:
+    - web-app-service.task5.svc.cluster.local
+    secretName: nginx-tls-secret
+  rules:
+  - host: web-app-service.task5.svc.cluster.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web-app-service
+            port:
+              number: 80
