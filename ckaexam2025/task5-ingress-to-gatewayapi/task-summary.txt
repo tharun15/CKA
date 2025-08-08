@@ -1,0 +1,45 @@
+# Task 5: Ingress to Gateway API Migration Summary
+
+This task has been set up to demonstrate the migration from Kubernetes Ingress to the Gateway API.
+
+## What has been done:
+
+1. Updated resources.yaml with an Ingress resource using a Kubernetes FQDN hostname format:
+   - Hostname: `web-app-service.task5.svc.cluster.local`
+   - TLS configuration using the existing nginx-tls-secret
+   - Routing traffic to web-app-service on port 80
+
+2. Created migration-instructions.md with guidelines for migrating to Gateway API:
+   - Explanation of current Ingress configuration
+   - Requirements for Gateway API migration
+   - Example Gateway API resources with hostname starting with "gateway"
+   - Instructions for deleting the Ingress resource once Gateway API is working
+
+3. Updated README.md with comprehensive instructions for:
+   - Setting up the environment with Nginx Ingress Controller and Nginx Gateway Controller
+   - Creating GatewayClass, Gateway, and HTTPRoute resources
+   - Testing the Gateway API configuration
+   - Deleting the Ingress resource to complete the migration
+   - Troubleshooting potential issues
+
+4. Updated execute.sh script to:
+   - Install Gateway API CRDs
+   - Install Nginx Ingress Controller for the Ingress resource
+   - Install Nginx Gateway Controller for the Gateway API resources
+   - Configure both controllers with NodePort service type
+
+## Key differences between Ingress and Gateway API implementation:
+
+1. Hostnames:
+   - Ingress: `web-app-service.task5.svc.cluster.local`
+   - Gateway API: `gateway.task5.svc.cluster.local`
+
+2. Structure:
+   - Ingress: Single resource with combined routing and TLS configuration
+   - Gateway API: Separated into GatewayClass, Gateway, and HTTPRoute resources
+
+3. Implementation:
+   - Ingress: Using Nginx Ingress Controller
+   - Gateway API: Using Nginx Gateway Controller
+
+The task demonstrates the evolution of Kubernetes' traffic routing capabilities, highlighting how Gateway API offers improved multi-tenancy, enhanced security, and more expressive routing options compared to the traditional Ingress resources. The complete migration process includes removing the old Ingress resource after confirming that the Gateway API implementation is functioning correctly.
