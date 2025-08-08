@@ -22,26 +22,46 @@ helm install gateway-api-crds gateway-api/gateway-api-crds
 
 echo "Gateway API CRDs have been installed."
 
-# Install Contour (an implementation of Gateway API) using Helm
-echo "Installing Contour Gateway Controller..."
+# Install Nginx Ingress Controller (for the Ingress resource)
+echo "Installing Nginx Ingress Controller..."
 
-# Add the Bitnami Helm repository (which contains Contour)
-helm repo add bitnami https://charts.bitnami.com/bitnami
+# Add the Nginx Ingress Controller Helm repository
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
 
-# Install Contour with Gateway API support enabled
-helm install contour bitnami/contour \
+# Install Nginx Ingress Controller
+helm install nginx-ingress ingress-nginx/ingress-nginx \
   --namespace task5 \
-  --set enableGatewayAPI=true \
-  --set service.type=NodePort
+  --set controller.service.type=NodePort
 
-# Wait for the Contour controller to be ready
-echo "Waiting for Contour Gateway Controller to be ready..."
+# Wait for the Nginx Ingress Controller to be ready
+echo "Waiting for Nginx Ingress Controller to be ready..."
 kubectl wait --namespace task5 \
   --for=condition=ready pod \
-  --selector=app.kubernetes.io/name=contour \
+  --selector=app.kubernetes.io/component=controller,app.kubernetes.io/instance=nginx-ingress \
   --timeout=120s
 
-echo "Contour Gateway Controller has been installed successfully!"
+echo "Nginx Ingress Controller has been installed successfully!"
+
+# Install Nginx Gateway Controller (for the Gateway API resources)
+echo "Installing Nginx Gateway Controller..."
+
+# Add the Nginx Gateway Helm repository
+helm repo add nginx-gateway https://helm.nginx.com/gateway
+helm repo update
+
+# Install Nginx Gateway Controller
+helm install nginx-gateway nginx-gateway/nginx-gateway \
+  --namespace task5 \
+  --set service.type=NodePort
+
+# Wait for the Nginx Gateway Controller to be ready
+echo "Waiting for Nginx Gateway Controller to be ready..."
+kubectl wait --namespace task5 \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/name=nginx-gateway \
+  --timeout=120s
+
+echo "Nginx Gateway Controller has been installed successfully!"
 echo ""
 echo "The system is now ready for migrating from Ingress to Gateway API."
