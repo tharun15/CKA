@@ -3,7 +3,7 @@
 ## Task Overview
 In this task, you will configure a Kubernetes Ingress resource with TLS to securely expose a web application to external traffic, making it accessible from outside the cluster via HTTPS with the example.com hostname.
 
-**Note:** A TLS Secret with a certificate for example.com is already provided in the resources.yaml file (reused from task1). The deployment has been configured to support both HTTP (port 80) and HTTPS (port 443) with the TLS certificate.
+**Note:** A TLS Secret with a certificate for example.com is already provided in the resources.yaml file (reused from task1). The TLS termination will be handled by the Ingress controller.
 
 ## Setup Instructions
 
@@ -38,7 +38,7 @@ Your task is to create an Ingress resource that exposes the web application to e
 
 Follow these steps to complete the task:
 
-1. Create an Ingress resource file (e.g., `ingress.yaml`) with TLS configuration to enable secure access to both HTTP and HTTPS endpoints:
+1. Create an Ingress resource file (e.g., `ingress.yaml`) with TLS configuration:
    ```yaml
    apiVersion: networking.k8s.io/v1
    kind: Ingress
@@ -64,32 +64,6 @@ Follow these steps to complete the task:
                name: web-app-service
                port:
                  number: 80
-   ```
-
-   Alternatively, you can also configure the Ingress to use the HTTPS port of the service:
-   ```yaml
-   apiVersion: networking.k8s.io/v1
-   kind: Ingress
-   metadata:
-     name: web-app-ingress-https
-     annotations:
-       # Add any necessary annotations here
-   spec:
-     tls:
-     - hosts:
-       - example.com
-       secretName: nginx-tls-secret
-     rules:
-     - host: example.com
-       http:
-         paths:
-         - path: /
-           pathType: Prefix
-           backend:
-             service:
-               name: web-app-service
-               port:
-                 number: 443
    ```
 
 2. Apply the Ingress resource:
@@ -119,7 +93,7 @@ Follow these steps to complete the task:
 - An Ingress resource named `web-app-ingress` is created and running
 - The Ingress resource correctly routes traffic to the web-app-service
 - TLS is properly configured using the provided `nginx-tls-secret`
-- The web application is accessible via both HTTP and HTTPS using the example.com hostname
+- The web application is accessible via HTTPS using the example.com hostname
 - The custom HTML content is displayed when accessing the application
 
 ## Troubleshooting
@@ -132,3 +106,16 @@ If you encounter issues, check:
 
 ## Note
 The execute.sh script will install the Nginx Ingress Controller in your cluster. If you already have an Ingress controller installed, you might need to adjust the Ingress resource configuration to match your existing controller.
+
+### Understanding TLS Termination in Ingress
+
+In this task, we're using the Ingress Controller to handle TLS termination, which is a common pattern in Kubernetes:
+
+1. **Client → Ingress**: HTTPS connection (port 443) with TLS encryption
+2. **Ingress → Service → Pod**: HTTP connection (port 80) inside the cluster
+
+This approach has several advantages:
+- The backend service and pods don't need to handle TLS, simplifying their configuration
+- TLS certificates are managed in one place (at the Ingress level)
+- The internal traffic in the cluster remains unencrypted, reducing CPU overhead
+- Certificate renewal and management happens at the Ingress layer without needing to update application pods
