@@ -53,7 +53,7 @@ echo "CPU limit: ${CPU_LIMIT}"
 echo "Memory request: ${MEM_REQUEST}Mi"
 echo "Memory limit: ${MEM_LIMIT}Mi"
 
-# Generate the deployment YAML
+# Generate the deployment YAML with specific resource values
 cat > resources.yaml << EOF
 apiVersion: apps/v1
 kind: Deployment
@@ -77,11 +77,11 @@ spec:
         command: ['sh', '-c', 'echo "Init container preparing environment..." && sleep 5']
         resources:
           requests:
-            cpu: ${CPU_REQUEST}
-            memory: ${MEM_REQUEST}Mi
+            cpu: 300m
+            memory: 500Mi
           limits:
-            cpu: ${CPU_LIMIT}
-            memory: ${MEM_LIMIT}Mi
+            cpu: 400m
+            memory: 600Mi
       containers:
       - name: nginx
         image: nginx:latest
@@ -89,11 +89,11 @@ spec:
         - containerPort: 80
         resources:
           requests:
-            cpu: ${CPU_REQUEST}
-            memory: ${MEM_REQUEST}Mi
+            cpu: 300m
+            memory: 500Mi
           limits:
-            cpu: ${CPU_LIMIT}
-            memory: ${MEM_LIMIT}Mi
+            cpu: 400m
+            memory: 600Mi
 EOF
 
 echo "Deployment YAML has been generated as resources.yaml"
