@@ -10,15 +10,11 @@ kubectl config set-context --current --namespace=task5
 echo "Current namespace is now:"
 kubectl config view --minify | grep namespace:
 
-# Install Gateway API CRDs using Helm
+# Install Gateway API CRDs
 echo "Installing Gateway API CRDs..."
 
-# Add the Gateway API Helm repository
-helm repo add gateway-api https://kubernetes-sigs.github.io/gateway-api
-helm repo update
-
-# Install the Gateway API CRDs
-helm install gateway-api-crds gateway-api/gateway-api-crds
+# Install the Gateway API CRDs directly from the official repository
+kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.0.0/standard-install.yaml
 
 echo "Gateway API CRDs have been installed."
 
@@ -43,25 +39,21 @@ kubectl wait --namespace task5 \
 
 echo "Nginx Ingress Controller has been installed successfully!"
 
-# Install Nginx Gateway Controller (for the Gateway API resources)
-echo "Installing Nginx Gateway Controller..."
+# Install Nginx Gateway Fabric (for the Gateway API resources)
+echo "Installing Nginx Gateway Fabric..."
 
-# Add the Nginx Gateway Helm repository
-helm repo add nginx-gateway https://helm.nginx.com/gateway
-helm repo update
-
-# Install Nginx Gateway Controller
-helm install nginx-gateway nginx-gateway/nginx-gateway \
+# Install Nginx Gateway Fabric using OCI registry
+helm install ngf oci://ghcr.io/nginx/charts/nginx-gateway-fabric \
   --namespace task5 \
   --set service.type=NodePort
 
-# Wait for the Nginx Gateway Controller to be ready
-echo "Waiting for Nginx Gateway Controller to be ready..."
+# Wait for the Nginx Gateway Fabric controller to be ready
+echo "Waiting for Nginx Gateway Fabric controller to be ready..."
 kubectl wait --namespace task5 \
   --for=condition=ready pod \
-  --selector=app.kubernetes.io/name=nginx-gateway \
+  --selector=app.kubernetes.io/name=nginx-gateway-fabric \
   --timeout=120s
 
-echo "Nginx Gateway Controller has been installed successfully!"
+echo "Nginx Gateway Fabric has been installed successfully!"
 echo ""
 echo "The system is now ready for migrating from Ingress to Gateway API."
