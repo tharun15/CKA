@@ -17,7 +17,7 @@ In this task, you will prepare a Linux system for Kubernetes by installing and c
 You need to complete the following tasks to prepare the system for Kubernetes:
 
 1. Set up cri-dockerd:
-   - Download the Debian package cri-dockerd_0.3.18-0.ubuntu-jammy_amd64.deb
+   - Use the provided Debian package cri-dockerd_0.4.0.3-0.debian-bookworm_amd64.deb
    - Install the package using dpkg
 
 2. Enable and start the cri-docker service:
@@ -32,14 +32,14 @@ You need to complete the following tasks to prepare the system for Kubernetes:
 
 ## Implementation Steps
 
-1. Download the cri-dockerd package:
+1. The cri-dockerd package is already downloaded in the task directory. If not present, you can download it:
    ```bash
-   wget -P ~/ https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.18/cri-dockerd_0.3.18-0.ubuntu-jammy_amd64.deb
+   wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.4.0/cri-dockerd_0.4.0.3-0.debian-bookworm_amd64.deb
    ```
 
 2. Install the package using dpkg:
    ```bash
-   sudo dpkg -i ~/cri-dockerd_0.3.18-0.ubuntu-jammy_amd64.deb
+   sudo dpkg -i cri-dockerd_0.4.0.3-0.debian-bookworm_amd64.deb
    sudo apt-get update
    sudo apt-get -f install -y
    ```
