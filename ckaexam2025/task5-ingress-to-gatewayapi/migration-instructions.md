@@ -37,7 +37,7 @@ kind: GatewayClass
 metadata:
   name: nginx-gateway-class
 spec:
-  controllerName: "nginx.org/gateway-controller"
+  controllerName: "nginx.org/gateway-fabric"
 
 ---
 # 2. Gateway - Defines the actual listener for incoming traffic
@@ -82,7 +82,7 @@ spec:
 
 ## Testing the Migration
 
-After applying the Gateway API resources, you should be able to access the application using the new hostname configuration. The execute.sh script installs Nginx Gateway Controller (a Gateway API implementation) configured for NodePort access, alongside the Nginx Ingress Controller for the Ingress resource.
+After applying the Gateway API resources, you should be able to access the application using the new hostname configuration. The execute.sh script installs Nginx Gateway Fabric (a Gateway API implementation) configured for NodePort access, alongside the Nginx Ingress Controller for the Ingress resource.
 
 ## Completing the Migration
 
