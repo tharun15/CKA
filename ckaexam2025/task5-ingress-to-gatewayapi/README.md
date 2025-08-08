@@ -48,7 +48,7 @@ Follow these steps to complete the task:
    apiVersion: gateway.networking.k8s.io/v1
    kind: GatewayClass
    metadata:
-     name: nginx-gateway-class
+     name: nginx
    spec:
      controllerName: "nginx.org/gateway-fabric"
    ```
@@ -60,7 +60,7 @@ Follow these steps to complete the task:
    metadata:
      name: web-gateway
    spec:
-     gatewayClassName: nginx-gateway-class
+     gatewayClassName: nginx
      listeners:
      - name: https
        protocol: HTTPS
