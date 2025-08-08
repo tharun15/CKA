@@ -40,19 +40,33 @@ kubectl wait --namespace task5 \
 echo "Nginx Ingress Controller has been installed successfully!"
 
 # Install Nginx Gateway Fabric (for the Gateway API resources)
-echo "Installing Nginx Gateway Fabric..."
+echo "Installing Nginx Gateway Fabric using Kustomize..."
 
-# Install Nginx Gateway Fabric using OCI registry
-helm install ngf oci://ghcr.io/nginx/charts/nginx-gateway-fabric \
-  --namespace task5 \
-  --set service.type=NodePort
+# Install Gateway API standard CRDs
+echo "Installing Gateway API standard CRDs..."
+kubectl kustomize "https://github.com/nginx/nginx-gateway-fabric/config/crd/gateway-api/standard?ref=v1.6.2" | kubectl apply -f -
+
+# Install Gateway API experimental CRDs
+echo "Installing Gateway API experimental CRDs..."
+kubectl kustomize "https://github.com/nginx/nginx-gateway-fabric/config/crd/gateway-api/experimental?ref=v1.6.2" | kubectl apply -f -
+
+# Install Nginx Gateway Fabric CRDs
+echo "Installing Nginx Gateway Fabric CRDs..."
+kubectl apply -f https://raw.githubusercontent.com/nginx/nginx-gateway-fabric/v1.6.2/deploy/crds.yaml
+
+# Install Nginx Gateway Fabric controller
+echo "Installing Nginx Gateway Fabric controller..."
+kubectl apply -f https://raw.githubusercontent.com/nginx/nginx-gateway-fabric/v1.6.2/deploy/default/deploy.yaml
 
 # Wait for the Nginx Gateway Fabric controller to be ready
 echo "Waiting for Nginx Gateway Fabric controller to be ready..."
-kubectl wait --namespace task5 \
+kubectl wait --namespace nginx-gateway \
   --for=condition=ready pod \
   --selector=app.kubernetes.io/name=nginx-gateway-fabric \
   --timeout=120s
+
+echo "Verifying Nginx Gateway Fabric installation..."
+kubectl get pods -n nginx-gateway
 
 echo "Nginx Gateway Fabric has been installed successfully!"
 echo ""
