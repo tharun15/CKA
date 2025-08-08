@@ -37,6 +37,20 @@ The Ingress resource is already configured with a Kubernetes FQDN hostname forma
    kubectl get services
    ```
 
+4. Test the Ingress resource:
+   ```bash
+   # Get the Ingress service IP or use the provided IP
+   INGRESS_IP=$(kubectl get service nginx-ingress-ingress-nginx-controller -o jsonpath='{.spec.clusterIP}')
+   
+   # Then access the application via the hostname:
+   curl -k -H "Host: web-app-service.task5.svc.cluster.local" https://$INGRESS_IP
+   
+   # Or use a known IP address:
+   # curl -k -H "Host: web-app-service.task5.svc.cluster.local" https://10.102.37.123
+   
+   # The -k flag is used to skip certificate validation when using self-signed certificates
+   ```
+
 ## Task Requirements
 
 Your task is to migrate from Ingress to Gateway API resources. The Ingress resource is already configured with a hostname of `web-app-service.task5.svc.cluster.local`. Instead of using a single Ingress resource, you'll need to create three separate Gateway API resources with a new hostname that starts with "gateway".
@@ -121,6 +135,16 @@ Follow these steps to complete the task:
    curl -k -H "Host: gateway.task5.svc.cluster.local" https://localhost:$NODE_PORT
    
    # The -k flag is used to skip certificate validation when using self-signed certificates
+   
+   # Alternatively, you can use these specific commands:
+   # First, get the correct NodePort numbers:
+   kubectl get svc -n nginx-gateway
+   
+   # For HTTP (replace 30626 with the actual HTTP NodePort):
+   curl -H "Host: gateway.task5.svc.cluster.local" http://localhost:30626
+   
+   # For HTTPS (replace 31775 with the actual HTTPS NodePort):
+   curl -k --resolve gateway.task5.svc.cluster.local:31775:127.0.0.1 https://gateway.task5.svc.cluster.local:31775
    ```
 
 7. Once you've verified that the Gateway API configuration is working correctly, delete the Ingress resource to complete the migration:
