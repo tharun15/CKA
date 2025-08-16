@@ -115,10 +115,11 @@ For the best experience with these tasks, we recommend using KillerCoda:
 
 1. Go to [killercoda.com/kubernetes](https://killercoda.com/kubernetes)
 2. Start a new Kubernetes playground scenario
-3. Clone this repository: `git clone https://github.com/tharun15/ckaexam2025.git`
-4. Navigate to the task directory and run the execute.sh script
-5. Complete the task within the 1-hour session limit
-6. If your session expires, simply start a new playground
+3. Clone this repository: `git clone https://github.com/tharun15/CKA.git`
+4. cd ckaexam2025
+5. Navigate to the task directory and run the execute.sh script
+6. Complete the task within the 1-hour session limit
+7. If your session expires, simply start a new playground
 
 ## Learning Path
 
